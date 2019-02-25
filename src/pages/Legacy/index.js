@@ -2,13 +2,14 @@
 import React, { Component } from 'react';
 import {
   Table, Divider, Popconfirm,Card,Form,Modal,Statistic,Button,Select,InputNumber,
-  Badge,
+  Badge,Input,
 } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const Search = Input.Search;
 
 const CreateForm = Form.create()(props => {
   const { modalVisible, form, handleAdd,handleEdit, handleModalVisible,record,playerList } = props;
@@ -192,7 +193,21 @@ class Index extends Component{
       record,
       modalVisible:true,
     })
-  }
+  };
+
+  handleSearch=(value)=>{
+    const {rewardList} = this.state;
+    if(value){
+      const newList = rewardList.filter(
+        item =>
+          item.account.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+          item.name.toLowerCase().indexOf(value.toLowerCase()) > -1
+      );
+      this.setState({rewardList:newList})
+    }else {
+      this.queryRewardList()
+    }
+  };
 
   render(){
     const {modalVisible,record,playerList,rewardList,lastReset} = this.state;
@@ -230,7 +245,7 @@ class Index extends Component{
       title: '应奖励资金',
       key: 'give',
       dataIndex: 'give',
-      defaultSortOrder: 'descend',
+      // defaultSortOrder: 'descend',
       sorter: (a, b) => a.give - b.give,
       render: (text,record) => (
         <div>
@@ -257,6 +272,7 @@ class Index extends Component{
       title: '总奖励积分',
       key: 'total',
       dataIndex: 'total',
+      sorter: (a, b) => a.total - b.total,
       render: (text,record) => (
         <span className={styles.total}>{record.total}</span>
       ),
@@ -303,6 +319,13 @@ class Index extends Component{
           <div style={{flex:1}}>
             <Button icon="dollar" type="primary" onClick={()=>this.handleShowAdd()}>新增奖励</Button>
           </div>
+          <div style={{flex:1}}>
+            <Search
+              placeholder="输入玩家账号&&名称搜索"
+              onSearch={value => this.handleSearch(value)}
+              enterButton="查找"
+            />
+          </div>
           <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:'flex-end',marginRight:30}}>
             <div>
               <Popconfirm
@@ -316,7 +339,7 @@ class Index extends Component{
             <div style={{fontSize:14,marginTop:5}}>最近重置：{lastReset}</div>
           </div>
         </div>
-        <Table columns={columns} dataSource={rewardList} pagination={false} />
+        <Table columns={columns} dataSource={rewardList} pagination={{pageSize: 50,position:"both",size:'small'}} />
         <CreateForm {...parentMethods} modalVisible={modalVisible} record={record} playerList={playerList} />
       </Card>
     )

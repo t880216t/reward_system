@@ -169,7 +169,7 @@ class Players extends Component{
         <div className={styles.addbutton}>
           <Button icon="plus" type="primary" onClick={()=>this.handleShowAdd()}>新增玩家</Button>
         </div>
-        <Table columns={columns} dataSource={playerList} />
+        <Table columns={columns} dataSource={playerList} pagination={{pageSize: 20,position:"both",size:'small'}} />
         <CreateForm {...parentMethods} modalVisible={modalVisible} record={record} />
       </Card>
     )
