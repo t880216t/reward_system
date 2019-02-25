@@ -54,6 +54,10 @@ export async function queryPlayerList() {
   return request(`/api/leyacg/playerList?_=${new Date().getTime().toString()}`);
 }
 
+export async function querySendAllReward() {
+  return request(`/api/leyacg/sendAllReward?_=${new Date().getTime().toString()}`);
+}
+
 export async function queryResetReward() {
   return request(`/api/leyacg/resetReward?_=${new Date().getTime().toString()}`);
 }

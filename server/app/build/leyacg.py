@@ -137,6 +137,19 @@ def sendReward():
   else:
     return make_response(jsonify({'code': 10001, 'msg': 'error', 'content': []}))
 
+@leyacg.route('/sendAllReward')
+def sendAllReward():
+  data = {'status':1}
+  rewardData = Reward.query.filter_by(delete_flag=0).all()
+  if rewardData:
+    for item in rewardData:
+      row_object = Reward.query.filter_by(id=item.id)
+      row_object.update(data)
+      db.session.commit()
+    return make_response(jsonify({'code': 0, 'msg': 'sucess', 'content': []}))
+  else:
+    return make_response(jsonify({'code': 10001, 'msg': 'error', 'content': []}))
+
 def addResetLog():
   data = ResetLog()
   db.session.add(data)

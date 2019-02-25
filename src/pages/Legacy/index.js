@@ -117,6 +117,15 @@ class Index extends Component{
       .then(()=>{
         this.queryRewardList()
       })
+  };
+
+  handleSendAll=()=>{
+    this.props.dispatch({
+      type:'leyacg/querySendAllReward'
+    })
+      .then(()=>{
+        this.queryRewardList()
+      })
   }
 
   handleShowAdd=()=>{
@@ -295,7 +304,15 @@ class Index extends Component{
             <Button icon="dollar" type="primary" onClick={()=>this.handleShowAdd()}>新增奖励</Button>
           </div>
           <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:'flex-end',marginRight:30}}>
-            <Button icon="reload" style={{backgroundColor:'#d63031',borderColor:'#d63031',width:120}} type="primary" onClick={()=>this.handleReset()}>重置本周</Button>
+            <div>
+              <Popconfirm
+                title="确定已经发放所有奖励?"
+                onConfirm={()=>this.handleSendAll()}
+              >
+                <Button icon="swap" style={{backgroundColor:'#f9ca24',borderColor:'#f9ca24',width:120,marginRight:10}} type="primary">一键发放</Button>
+              </Popconfirm>
+              <Button icon="reload" style={{backgroundColor:'#d63031',borderColor:'#d63031',width:120}} type="primary" onClick={()=>this.handleReset()}>重置本周</Button>
+            </div>
             <div style={{fontSize:14,marginTop:5}}>最近重置：{lastReset}</div>
           </div>
         </div>
